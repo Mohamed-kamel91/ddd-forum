@@ -1,0 +1,80 @@
+{
+  "name": "ddd-forum",
+  "description": "A forum web application for developers to share ideas, thoughts, and experiences about Domain-Driven Design (DDD).",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf ./build && tsc",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:migrate:seed": "yarn db:migrate && yarn db:seed",
+    "db:sync": "yarn db:migrate && yarn db:generate",
+    "db:setup": "yarn db:migrate && yarn db:generate && yarn db:seed",
+    "db:seed": "prisma db seed",
+    "db:reset": "prisma migrate reset",
+    "db:reset:seed": "prisma migrate reset && yarn db:seed",
+    "db:studio": "prisma studio",
+    "start:dev": "yarn db:migrate && yarn db:generate && npx nodemon",
+    "start": "yarn build && node build/index.js",
+    "lint": "eslint . --ext .ts",
+    "prettier-format": "run-script-os",
+    "prettier-format:win32": "prettier --config .prettierrc \"./src/**/*.ts\" --write",
+    "prettier-format:darwin:linux": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "prettier-format:default": "prettier --config .prettierrc 'src/**/*.ts' --write",
+    "prettier-watch": "run-script-os",
+    "prettier-watch:win32": "onchange \"src/**/*.ts\" -- prettier --write {{changed}}",
+    "prettier-watch:darwin:linux": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+    "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
+    "test:dev": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
+    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose tests/e2e/ --runInBand"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn test && yarn prettier-format && yarn lint"
+    }
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.3.0",
+    "@prisma/client": "^7.3.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "jest-cucumber": "^4.5.0",
+    "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^10.3.0",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^25.2.2",
+    "@types/supertest": "^6.0.3",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jest": "^29.13.0",
+    "eslint-plugin-prettier": "^5.5.5",
+    "husky": "^9.1.7",
+    "jest": "^30.2.0",
+    "nodemon": "^3.1.11",
+    "onchange": "^7.1.0",
+    "prettier": "^3.8.1",
+    "prisma": "^7.3.0",
+    "rimraf": "^6.1.2",
+    "run-script-os": "^1.1.6",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.6",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.55.0"
+  }
+}
