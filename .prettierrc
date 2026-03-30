@@ -1,0 +1,17 @@
+{
+  "tabWidth": 2,
+  "useTabs": false,
+  "singleQuote": true,
+  "jsxSingleQuote": false,
+  "trailingComma": "all",
+  "printWidth": 70,
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["**/*.test.{js,jsx,ts,tsx}"],
+      "options": {
+        "printWidth": 100
+      }
+    }
+  ]
+}

@@ -1,14 +1,14 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "build",
-    "target": "ES2023",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2023"],
-    "types": ["node", "jest"],
+    "outDir": "dist",
+    "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2022"],
+    "types": ["node", "jest", "jest-cucumber"],
 
     "sourceMap": true,
-
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "noUncheckedSideEffectImports": true,
@@ -18,12 +18,11 @@
     "esModuleInterop": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "prisma/**/*"],
+  "include": ["src", "generated/prisma/*"],
   "exclude": [
-    "node_modules",
-    "dist",
-    "build",
     "**/*.spec.ts",
-    "**/*.test.ts"
+    "**/*.infra.ts",
+    "**/*.test.ts",
+    "**/*.e2e.ts"
   ]
 }
