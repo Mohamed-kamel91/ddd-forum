@@ -18,18 +18,11 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@dddforum/shared/*": ["../shared/src/*"]
-    }
+    "noFallthroughCasesInSwitch": true
   },
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "include": ["src"],
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*.infra.ts",
-    "**/*.test.ts",
-    "**/*.e2e.ts"
-  ]
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "../shared" }
+  ],
+  "include": ["src"]
 }

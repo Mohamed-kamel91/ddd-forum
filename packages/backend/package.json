@@ -6,9 +6,10 @@
   "license": "ISC",
   "private": true,
   "scripts": {
-    "build": "rimraf ./dist && tsc",
+    "clean": "rimraf ./dist",
+    "build": "yarn clean && tsc",
     "start:dev": "yarn db:migrate && yarn db:generate && npx nodemon",
-    "start": "yarn build && node build/index.js",
+    "start": "yarn build && node dist/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:seed": "yarn db:migrate && yarn db:seed",
@@ -40,7 +41,7 @@
     "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
-    "@dddforum/shared": "file:../shared",
+    "@dddforum/shared": "*",
     "@prisma/adapter-pg": "^7.3.0",
     "@prisma/client": "^7.3.0",
     "cors": "^2.8.6",

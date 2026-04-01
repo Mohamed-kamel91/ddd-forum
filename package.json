@@ -10,8 +10,8 @@
     "packages/*"
   ],
   "scripts": {
-    "clean": "npm run clean --workspaces --if-present",
-    "build": "npm run build --workspaces --if-present"
+    "clean": "yarn clean --workspaces --if-present",
+    "build": "yarn build --workspaces --if-present"
   },
   "devDependencies": {
     "@types/node": "^25.2.2",
