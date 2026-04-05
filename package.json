@@ -10,8 +10,17 @@
     "packages/*"
   ],
   "scripts": {
-    "clean": "yarn clean --workspaces --if-present",
-    "build": "yarn build --workspaces --if-present"
+    "clean": "yarn workspaces run clean",
+    "start": "yarn workspace @dddforum/backend start",
+    "build": "yarn build:shared && yarn build:back && yarn build:front",
+    "build:shared": "yarn workspace @dddforum/shared build",
+    "build:front": "yarn workspace @dddforum/frontend build",
+    "build:back": "yarn workspace @dddforum/backend build",
+    "lint": "yarn workspaces run lint",
+    "start:dev:front": "yarn workspace @dddforum/frontend start:dev",
+    "start:dev:back": "yarn workspace @dddforum/backend start:dev",
+    "test:e2e:front": "yarn workspace @dddforum/frontend test:e2e",
+    "test:e2e:back": "yarn workspace @dddforum/backend test:e2e"
   },
   "devDependencies": {
     "@types/node": "^25.2.2",

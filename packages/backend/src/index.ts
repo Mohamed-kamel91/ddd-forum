@@ -3,6 +3,9 @@ import cors from 'cors';
 
 import { prisma } from './database';
 import { User } from '../generated/prisma/client';
+import { nour } from '@dddforum/shared';
+
+console.log(nour(1));
 
 const app = express();
 app.use(express.json());

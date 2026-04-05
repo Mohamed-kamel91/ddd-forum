@@ -4,9 +4,10 @@
     "outDir": "./dist",
     "target": "es2020",
     "module": "commonjs",
-    "moduleResolution": "node",
     "lib": ["ES2022"],
     "types": ["node", "jest", "jest-cucumber"],
+    // "rootDir": "./src",
+    // "composite": true,
 
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,

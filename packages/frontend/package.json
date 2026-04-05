@@ -6,10 +6,11 @@
   "author": "Mohamed Kamel",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "clean": "rimraf ./dist",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:dev": "vite"
   },
   "dependencies": {
     "@dddforum/shared": "*",
