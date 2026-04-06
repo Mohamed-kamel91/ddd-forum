@@ -9,7 +9,7 @@
     "clean": "rimraf ./dist",
     "build": "tsc",
     "lint": "eslint . --ext .ts",
-    "start": "node dist/src/index.js",
+    "start": "node dist/index.js",
     "start:dev": "yarn db:migrate && yarn db:generate && nodemon",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

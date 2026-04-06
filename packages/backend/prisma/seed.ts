@@ -3,7 +3,7 @@ import {
   User,
   Vote,
   Comment,
-} from '../generated/prisma/client';
+} from '../src/generated/prisma/client';
 import { prisma } from '../src/database';
 
 const initialUsers: User[] = [

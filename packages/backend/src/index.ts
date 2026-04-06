@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 
 import { prisma } from './database';
-import { User } from '../generated/prisma/client';
+import { User } from './generated/prisma/client';
 import { nour } from '@dddforum/shared';
 
 console.log(nour(1));
