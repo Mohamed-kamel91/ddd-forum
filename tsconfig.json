@@ -6,12 +6,12 @@
     "types": ["node", "jest"],
     "strict": true,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "baseUrl": "./",
-    "paths": {
-      "@dddforum/backend/*": ["packages/backend/src/*"],
-      "@dddforum/frontend/*": ["packages/frontend/src/*"],
-      "@dddforum/shared/*": ["packages/shared/src/*"]
-    }
-  }
+    "resolveJsonModule": true
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.infra.ts",
+    "**/*.test.ts",
+    "**/*.e2e.ts"
+  ]
 }

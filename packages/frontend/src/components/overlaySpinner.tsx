@@ -1,9 +1,9 @@
-import { Rings } from "react-loader-spinner";
+// import { Rings } from "react-loader-spinner";
 
 export const OverlaySpinner = ({ isActive }: { isActive: boolean }) =>
   isActive ? (
     <div className="overlay-spinner">
-      <Rings
+      {/* <Rings
         height="80"
         width="80"
         color="#4fa94d"
@@ -12,7 +12,7 @@ export const OverlaySpinner = ({ isActive }: { isActive: boolean }) =>
         wrapperClass=""
         visible={true}
         ariaLabel="rings-loading"
-      />
+      /> */}
     </div>
   ) : (
     ""

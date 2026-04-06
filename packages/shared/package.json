@@ -5,7 +5,15 @@
   "license": "ISC",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rimraf ./dist",
+    "build": "tsc"
   },
-  "main": "dist/index.js"
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "import": "./dist/index.d.ts"
+    }
+  }
 }
