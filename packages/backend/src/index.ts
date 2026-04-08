@@ -3,9 +3,6 @@ import cors from 'cors';
 
 import { prisma } from './database';
 import { User } from './generated/prisma/client';
-import { nour } from '@dddforum/shared';
-
-console.log(nour(1));
 
 const app = express();
 app.use(express.json());
@@ -192,9 +189,11 @@ app.get('/posts', async (req: Request, res: Response) => {
 });
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
 
 prisma.post
   .findMany({})
