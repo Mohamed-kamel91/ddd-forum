@@ -5,6 +5,7 @@
   "author": "Mohamed Kamel",
   "license": "ISC",
   "private": true,
+  "type": "module",
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "tsc",
