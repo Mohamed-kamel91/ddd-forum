@@ -4,6 +4,7 @@
   "private": true,
   "license": "ISC",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "tsc"
@@ -13,7 +14,7 @@
   "exports": {
     ".": {
       "default": "./dist/index.js",
-      "import": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts"
     }
   }
 }
