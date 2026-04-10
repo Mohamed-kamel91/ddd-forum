@@ -11,6 +11,7 @@ app.use(cors());
 const Errors = {
   UsernameAlreadyTaken: 'UserNameAlreadyTaken',
   EmailAlreadyInUse: 'EmailAlreadyInUse',
+  MissingEmail: 'MissingEmail',
   ValidationError: 'ValidationError',
   ServerError: 'ServerError',
   ClientError: 'ClientError',
@@ -44,7 +45,7 @@ function parseUserForResponse(user: User) {
 }
 
 // Create a new user
-app.post('/users/new', async (req: Request, res: Response) => {
+app.post('/users', async (req: Request, res: Response) => {
   try {
     const keyIsMissing = isMissingKeys(req.body, [
       'email',
@@ -187,15 +188,48 @@ app.get('/posts', async (req: Request, res: Response) => {
     });
   }
 });
+
+app.post('/marketing', async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        data: undefined,
+        success: false,
+        error: Errors.MissingEmail,
+      });
+    }
+
+    console.log(
+      `MailchimpContactList: Adding ${email} list... for marketing emails.`,
+    );
+
+    return res.status(200).json({
+      error: undefined,
+      data: { email, subscribed: true },
+      success: true,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      error: Errors.ServerError,
+      data: undefined,
+      success: false,
+    });
+  }
+});
+
 const port = process.env.PORT || 3000;
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
+
+  prisma.post
+    .findMany({})
+    .then((posts) => console.log(posts))
+    .catch((err) => console.log(err));
 }
 
-prisma.post
-  .findMany({})
-  .then((posts) => console.log(posts))
-  .catch((err) => console.log(err));
+export { app };
