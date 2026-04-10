@@ -3,7 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "description": "A forum web application for developers to share ideas, thoughts, and experiences about Domain-Driven Design (DDD).",
-  "type": "module",
   "license": "ISC",
   "author": "Mohamed Kamel",
   "workspaces": [
