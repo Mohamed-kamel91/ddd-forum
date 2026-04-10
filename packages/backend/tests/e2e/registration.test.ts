@@ -5,14 +5,14 @@ import { resetDatabase } from '../fixtures';
 import { app } from '../../src';
 
 import { CreateUserBuilder } from '../../../shared/tests/builders/create-user-builder';
-import type { CreateUserParams } from '../../../shared/src';
+import  { type CreateUserParams } from '../../../shared/src';
 
 const feature = loadFeature(
   path.join(__dirname, '../../../shared/tests/features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
-  afterEach(async () => {
+  beforeEach(async () => {
     await resetDatabase();
   });
 
@@ -67,23 +67,40 @@ defineFeature(feature, (test) => {
     });
   });
 
-  // test('Successful registration without marketing emails accepted', ({
-  //   given,
-  //   when,
-  //   then,
-  //   and,
-  // }) => {
-  //   given('I am a new user', () => {});
+  test('Successful registration without marketing emails accepted', ({
+    given,
+    when,
+    then,
+  }) => {
+    let createUserInput: CreateUserParams;
+    let createUserResponse: any;
 
-  //   when(
-  //     'I register with valid account details declining marketing emails',
-  //     () => {},
-  //   );
+    given('I am a new user', () => {
+      createUserInput = new CreateUserBuilder().build();
+    });
 
-  //   then('I should be granted access to my account', () => {});
+    when(
+      'I register with valid account details declining marketing emails',
+      async () => {
+        createUserResponse = await request(app)
+          .post('/users')
+          .send(createUserInput);
+      },
+    );
 
-  //   and('I should not expect to receive marketing emails', () => {});
-  // });
+    then('I should be granted access to my account', () => {
+      const { data, success, error } = createUserResponse.body;
+
+      expect(createUserResponse.status).toBe(201);
+      expect(data.id).toBeDefined();
+      expect(data.email).toBe(createUserInput.email);
+      expect(data.firstName).toBe(createUserInput.firstName);
+      expect(data.lastName).toBe(createUserInput.lastName);
+      expect(data.username).toBe(createUserInput.username);
+      expect(success).toBe(true);
+      expect(error).toBeUndefined();
+    });
+  });
 
   // test('Account already created with email', ({ given, when, then, and }) => {
   //   given('a set of users already created accounts', (table) => {});
