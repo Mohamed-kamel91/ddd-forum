@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { CreateUserParams } from '../../src';
+import { type CreateUserInput } from '../../src';
 
 export class CreateUserBuilder {
-  private props: CreateUserParams;
+  private props: CreateUserInput;
 
   constructor() {
     this.props = {
@@ -10,6 +10,7 @@ export class CreateUserBuilder {
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       username: faker.internet.username(),
+      password: faker.internet.password(),
     };
   }
 
@@ -30,6 +31,11 @@ export class CreateUserBuilder {
 
   public withUsername(username: string) {
     this.props.username = username;
+    return this;
+  }
+
+  public withPasswrod(password: string) {
+    this.props.password = password;
     return this;
   }
 

@@ -1,11 +1,11 @@
 import path from 'path';
 import request from 'supertest';
 import { defineFeature, loadFeature } from 'jest-cucumber';
-import { resetDatabase } from '../fixtures';
-import { app } from '../../src';
 
+import { resetDatabase, buildManyUsers } from '../fixtures';
+import { app } from '../../src';
 import { CreateUserBuilder } from '../../../shared/tests/builders/create-user-builder';
-import  { type CreateUserParams } from '../../../shared/src';
+import { type CreateUserInput } from '../../../shared/src';
 
 const feature = loadFeature(
   path.join(__dirname, '../../../shared/tests/features/registration.feature'),
@@ -22,7 +22,7 @@ defineFeature(feature, (test) => {
     then,
     and,
   }) => {
-    let createUserInput: CreateUserParams;
+    let createUserInput: CreateUserInput;
     let createUserResponse: any;
     let addEmailToListResponse: any;
 
@@ -72,7 +72,7 @@ defineFeature(feature, (test) => {
     when,
     then,
   }) => {
-    let createUserInput: CreateUserParams;
+    let createUserInput: CreateUserInput;
     let createUserResponse: any;
 
     given('I am a new user', () => {
@@ -102,35 +102,157 @@ defineFeature(feature, (test) => {
     });
   });
 
-  // test('Account already created with email', ({ given, when, then, and }) => {
-  //   given('a set of users already created accounts', (table) => {});
+  test('Account already created with email', ({ given, when, then, and }) => {
+    let existingUsers: CreateUserInput[] = [];
+    let newUsers: CreateUserInput[] = [];
+    let createUserResponses: any[];
 
-  //   when('new users attempt to register with those emails', () => {});
+    given('a set of users already created accounts', async (table: any[]) => {
+      existingUsers = table.map((user: CreateUserInput) => {
+        return new CreateUserBuilder()
+          .withEmail(user.email)
+          .withFirstname(user.firstName)
+          .withLastname(user.lastName)
+          .withUsername(user.username)
+          .build();
+      });
 
-  //   then(
-  //     'they should see an error notifying them that the account already exists',
-  //     () => {},
-  //   );
+      await buildManyUsers(existingUsers);
+    });
 
-  //   and('they should not have been sent access to account details', () => {});
-  // });
+    when(
+      'new users attempt to register with those emails',
+      async (table: any[]) => {
+        newUsers = table.map((input: CreateUserInput) => {
+          return new CreateUserBuilder()
+            .withEmail(input.email)
+            .withFirstname(input.firstName)
+            .withLastname(input.lastName)
+            .withUsername(input.username)
+            .build();
+        });
 
-  // test('Username already taken', ({ given, when, then, and }) => {
-  //   given(
-  //     'a set of users have already created their accounts with valid details',
-  //     (table) => {},
-  //   );
+        createUserResponses = await Promise.all(
+          newUsers.map((user) => request(app).post('/users').send(user)),
+        );
+      },
+    );
 
-  //   when(
-  //     'new users attempt to register with already taken usernames',
-  //     (table) => {},
-  //   );
+    then(
+      'they should see an error notifying them that the account already exists',
+      () => {
+        createUserResponses.forEach((response) => {
+          expect(response.body.error).toBe('EmailAlreadyInUse');
+        });
+      },
+    );
 
-  //   then(
-  //     'they see an error notifying them that the username has already been taken',
-  //     () => {},
-  //   );
+    and('they should not be sent access to account details', () => {
+      createUserResponses.forEach((response) => {
+        const { data, success, error } = response.body;
 
-  //   and('they should not have been sent access to account details', () => {});
-  // });
+        expect(response.status).toBe(409);
+        expect(success).toBe(false);
+        expect(data).toBeUndefined();
+        expect(error).toBeDefined();
+      });
+    });
+  });
+
+  test('Username already taken', ({ given, when, then, and }) => {
+    let existingUsers: CreateUserInput[] = [];
+    let newUsers: CreateUserInput[] = [];
+    let createUserResponses: any[];
+
+    given(
+      'a set of users have already created their accounts with valid details',
+      async (table: any[]) => {
+        existingUsers = table.map((user: CreateUserInput) => {
+          return new CreateUserBuilder()
+            .withEmail(user.email)
+            .withFirstname(user.firstName)
+            .withLastname(user.lastName)
+            .withUsername(user.username)
+            .build();
+        });
+
+        await buildManyUsers(existingUsers);
+      },
+    );
+
+    when(
+      'new users attempt to register with already taken usernames',
+      async (table: any[]) => {
+        newUsers = table.map((input: CreateUserInput) => {
+          return new CreateUserBuilder()
+            .withEmail(input.email)
+            .withFirstname(input.firstName)
+            .withLastname(input.lastName)
+            .withUsername(input.username)
+            .build();
+        });
+
+        createUserResponses = await Promise.all(
+          newUsers.map((user) => request(app).post('/users').send(user)),
+        );
+      },
+    );
+
+    then(
+      'they see an error notifying them that the username has already been taken',
+      () => {
+        createUserResponses.forEach((response) => {
+          expect(response.body.error).toBe('UserNameAlreadyTaken');
+        });
+      },
+    );
+
+    and('they should not be sent access to account details', () => {
+      createUserResponses.forEach((response) => {
+        const { data, success, error } = response.body;
+
+        expect(response.status).toBe(409);
+        expect(success).toBe(false);
+        expect(data).toBeUndefined();
+        expect(error).toBeDefined();
+      });
+    });
+  });
+
+  test('Invalid or missing registration details', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
+    let invalidUser: Partial<CreateUserInput>;
+    let response: any;
+
+    given('I am a new user', () => {
+      const user = new CreateUserBuilder().build();
+
+      invalidUser = {
+        firstName: user.firstName,
+        email: user.email,
+        lastName: user.lastName,
+      };
+    });
+
+    when('I register with invalid account details', async () => {
+      response = await request(app).post('/users').send(invalidUser);
+    });
+
+    then('I should see an error notifying me that my input is invalid', () => {
+      expect(response.body.error).toBe('ValidationError');
+    });
+
+    and('I should not have been sent access to account details', () => {
+      const { data, success, error } = response.body;
+
+      expect(response.status).toBe(400);
+      expect(success).toBe(false);
+      expect(data).toBeUndefined();
+      expect(error).toBeDefined();
+    });
+  });
 });

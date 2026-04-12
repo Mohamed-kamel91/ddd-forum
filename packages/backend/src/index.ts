@@ -52,6 +52,7 @@ app.post('/users', async (req: Request, res: Response) => {
       'firstName',
       'lastName',
       'username',
+      'password',
     ]);
 
     if (keyIsMissing) {

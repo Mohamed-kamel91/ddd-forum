@@ -15,4 +15,37 @@ Feature: Registration
 		When I register with valid account details declining marketing emails
 		Then I should be granted access to my account
 
- 
+  # Failure scenarios
+  Scenario: Invalid or missing registration details
+    Given I am a new user
+    When I register with invalid account details
+    Then I should see an error notifying me that my input is invalid
+    And I should not have been sent access to account details
+
+  Scenario: Account already created with email
+    Given a set of users already created accounts
+      | firstName | lastName | username     | email             |
+      | John      | Doe      | thechosenone | john@example.com  |
+      | Alice     | Smith    | chillblinton | alice@example.com |
+      | David     | Brown    | greenday     | david@example.com |
+    When new users attempt to register with those emails
+      | firstName | lastName | username      | email              |
+      | Bill      | Bob      | the_chosenone1 | john@example.com  |
+      | Max       | Samson   | !chillblinton2 | alice@example.com |
+      | Will      | Steff    | greenday@3     | david@example.com |
+    Then they should see an error notifying them that the account already exists
+    And they should not be sent access to account details
+
+  Scenario: Username already taken
+    Given a set of users have already created their accounts with valid details
+      | firstName | lastName | username     | email              |
+      | John      | Doe      | thechosenone | john1@example.com  |
+      | Alice     | Smith    | chillblinton | alice2@example.com |
+      | David     | Brown    | greenday     | david3@example.com |
+    When new users attempt to register with already taken usernames
+      | firstName | lastName | username     | email                 |
+      | Bill      | Bob      | thechosenone | billy@billbob.com     |
+      | Max       | Samson   | chillblinton | maxsamson@example.com |
+      | Will      | Steff    | greenday     | willsteff@example.com |
+    Then they see an error notifying them that the username has already been taken
+    And they should not be sent access to account details
