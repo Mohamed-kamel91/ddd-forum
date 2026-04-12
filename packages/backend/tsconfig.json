@@ -1,13 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist",
     "target": "es2020",
     "module": "commonjs",
     "lib": ["ES2022"],
     "types": ["node", "jest", "jest-cucumber"],
+
+    "outDir": "./dist",
     "rootDir": "./src",
-    // "composite": true,
+    "composite": true,
 
     "sourceMap": true,
     "noUncheckedIndexedAccess": true,
@@ -17,8 +18,16 @@
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
   },
   "include": ["src"],
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*.infra.ts",
+    "**/*.test.ts",
+    "**/*.e2e.ts"
+  ],
   "references": [{ "path": "../shared" }]
 }

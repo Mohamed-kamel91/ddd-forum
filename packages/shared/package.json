@@ -13,7 +13,7 @@
   "exports": {
     ".": {
       "default": "./dist/index.js",
-      "import": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts"
     }
   }
 }

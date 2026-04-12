@@ -10,7 +10,7 @@
     {
       "files": ["**/*.test.{js,jsx,ts,tsx}"],
       "options": {
-        "printWidth": 100
+        "printWidth": 80
       }
     }
   ]
