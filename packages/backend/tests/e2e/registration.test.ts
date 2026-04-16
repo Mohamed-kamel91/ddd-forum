@@ -3,15 +3,18 @@ import request from 'supertest';
 import { defineFeature, loadFeature } from 'jest-cucumber';
 
 import { resetDatabase, buildManyUsers } from '../fixtures';
-import { app } from '../../src';
+import webServer from '../../src/bootstrap';
 import { CreateUserBuilder } from '../../../shared/tests/builders/create-user-builder';
 import { type CreateUserInput } from '../../../shared/src';
+import { ErrorTypes, ExceptionTypes } from '../../src/shared/errors';
 
 const feature = loadFeature(
   path.join(__dirname, '../../../shared/tests/features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
+  const app = webServer.app;
+
   beforeEach(async () => {
     await resetDatabase();
   });
@@ -47,11 +50,11 @@ defineFeature(feature, (test) => {
       const { data, success, error } = createUserResponse.body;
 
       expect(createUserResponse.status).toBe(201);
-      expect(data.id).toBeDefined();
-      expect(data.email).toBe(createUserInput.email);
-      expect(data.firstName).toBe(createUserInput.firstName);
-      expect(data.lastName).toBe(createUserInput.lastName);
-      expect(data.username).toBe(createUserInput.username);
+      expect(data.user.id).toBeDefined();
+      expect(data.user.email).toBe(createUserInput.email);
+      expect(data.user.firstName).toBe(createUserInput.firstName);
+      expect(data.user.lastName).toBe(createUserInput.lastName);
+      expect(data.user.username).toBe(createUserInput.username);
       expect(success).toBe(true);
       expect(error).toBeUndefined();
     });
@@ -60,8 +63,8 @@ defineFeature(feature, (test) => {
       const { data, success, error } = addEmailToListResponse.body;
 
       expect(addEmailToListResponse.status).toBe(200);
-      expect(data.email).toBe(createUserInput.email);
-      expect(data.subscribed).toBe(true);
+      expect(data.subscription.email).toBe(createUserInput.email);
+      expect(data.subscription.subscribed).toBe(true);
       expect(success).toBe(true);
       expect(error).toBeUndefined();
     });
@@ -92,11 +95,11 @@ defineFeature(feature, (test) => {
       const { data, success, error } = createUserResponse.body;
 
       expect(createUserResponse.status).toBe(201);
-      expect(data.id).toBeDefined();
-      expect(data.email).toBe(createUserInput.email);
-      expect(data.firstName).toBe(createUserInput.firstName);
-      expect(data.lastName).toBe(createUserInput.lastName);
-      expect(data.username).toBe(createUserInput.username);
+      expect(data.user.id).toBeDefined();
+      expect(data.user.email).toBe(createUserInput.email);
+      expect(data.user.firstName).toBe(createUserInput.firstName);
+      expect(data.user.lastName).toBe(createUserInput.lastName);
+      expect(data.user.username).toBe(createUserInput.username);
       expect(success).toBe(true);
       expect(error).toBeUndefined();
     });
@@ -129,6 +132,7 @@ defineFeature(feature, (test) => {
             .withFirstname(input.firstName)
             .withLastname(input.lastName)
             .withUsername(input.username)
+            .withPasswrod(input.password)
             .build();
         });
 
@@ -142,7 +146,7 @@ defineFeature(feature, (test) => {
       'they should see an error notifying them that the account already exists',
       () => {
         createUserResponses.forEach((response) => {
-          expect(response.body.error).toBe('EmailAlreadyInUse');
+          expect(response.body.error).toBe(ExceptionTypes.EMAIL_ALREADY_TAKEN);
         });
       },
     );
@@ -173,6 +177,7 @@ defineFeature(feature, (test) => {
             .withFirstname(user.firstName)
             .withLastname(user.lastName)
             .withUsername(user.username)
+            .withPasswrod(user.password)
             .build();
         });
 
@@ -189,6 +194,7 @@ defineFeature(feature, (test) => {
             .withFirstname(input.firstName)
             .withLastname(input.lastName)
             .withUsername(input.username)
+            .withPasswrod(input.password)
             .build();
         });
 
@@ -202,7 +208,9 @@ defineFeature(feature, (test) => {
       'they see an error notifying them that the username has already been taken',
       () => {
         createUserResponses.forEach((response) => {
-          expect(response.body.error).toBe('UserNameAlreadyTaken');
+          expect(response.body.error).toBe(
+            ExceptionTypes.USERNAME_ALREADY_TAKEN,
+          );
         });
       },
     );
@@ -243,7 +251,7 @@ defineFeature(feature, (test) => {
     });
 
     then('I should see an error notifying me that my input is invalid', () => {
-      expect(response.body.error).toBe('ValidationError');
+      expect(response.body.error).toBe(ErrorTypes.VALIDATION_ERROR);
     });
 
     and('I should not have been sent access to account details', () => {
