@@ -40,7 +40,7 @@ class UserController {
 
       return res.status(200).json({
         error: undefined,
-        data: parseUserForResponse(data),
+        data: { user: parseUserForResponse(data) },
         success: true,
       });
     } catch (error) {
