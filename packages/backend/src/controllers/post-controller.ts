@@ -13,11 +13,11 @@ class PostController {
   ) => {
     try {
       const dto = getPostsDTO.fromRequest(req.query);
-      const data = await this.postService.getPosts(dto);
+      const posts = await this.postService.getPosts(dto);
 
       return res.json({
         error: undefined,
-        data,
+        data: { posts },
         success: true,
       });
     } catch (error) {
