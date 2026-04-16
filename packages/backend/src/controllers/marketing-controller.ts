@@ -17,7 +17,7 @@ class MarketingController {
 
       return res.json({
         error: undefined,
-        data,
+        data: { subscription: data },
         success: true,
       });
     } catch (error) {
