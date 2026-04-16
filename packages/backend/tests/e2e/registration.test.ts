@@ -63,8 +63,8 @@ defineFeature(feature, (test) => {
       const { data, success, error } = addEmailToListResponse.body;
 
       expect(addEmailToListResponse.status).toBe(200);
-      expect(data.email).toBe(createUserInput.email);
-      expect(data.subscribed).toBe(true);
+      expect(data.subscription.email).toBe(createUserInput.email);
+      expect(data.subscription.subscribed).toBe(true);
       expect(success).toBe(true);
       expect(error).toBeUndefined();
     });
