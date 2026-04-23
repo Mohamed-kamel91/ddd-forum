@@ -1,5 +1,5 @@
+import { ContactListAPI } from '.';
 import { AddEmailToListDTO } from '../dtos/marketing-dtos';
-import { ContactListAPI } from './contact-list-api';
 
 class MarketingService {
   constructor(private contactListAPI: ContactListAPI) {}
