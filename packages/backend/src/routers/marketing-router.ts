@@ -1,4 +1,4 @@
-import { BaseRouter } from '../base-router';
+import { BaseRouter } from '../shared/http/base-router';
 import { MarketingController } from '../controllers';
 
 export class MarketingRouter extends BaseRouter {
