@@ -1,14 +1,16 @@
-import { prisma } from '../../src/database';
+import { database } from '../../src/shared/bootstrap';
 
 async function resetDatabase() {
-  const deleteAllVotes = prisma.vote.deleteMany();
-  const deleteAllComments = prisma.comment.deleteMany();
-  const deleteAllPosts = prisma.post.deleteMany();
-  const deleteAllMembers = prisma.member.deleteMany();
-  const deleteAllUsers = prisma.user.deleteMany();
+  const dbConnection = database.getConnection();
+
+  const deleteAllVotes = dbConnection.vote.deleteMany();
+  const deleteAllComments = dbConnection.comment.deleteMany();
+  const deleteAllPosts = dbConnection.post.deleteMany();
+  const deleteAllMembers = dbConnection.member.deleteMany();
+  const deleteAllUsers = dbConnection.user.deleteMany();
 
   try {
-    await prisma.$transaction([
+    await dbConnection.$transaction([
       deleteAllVotes,
       deleteAllComments,
       deleteAllPosts,
@@ -18,7 +20,7 @@ async function resetDatabase() {
   } catch (error) {
     console.error(error);
   } finally {
-    await prisma.$disconnect();
+    await dbConnection.$disconnect();
   }
 }
 

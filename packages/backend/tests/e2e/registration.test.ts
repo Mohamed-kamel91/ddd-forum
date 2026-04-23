@@ -1,19 +1,33 @@
 import path from 'path';
+import { Express } from 'express';
 import request from 'supertest';
 import { defineFeature, loadFeature } from 'jest-cucumber';
 
 import { resetDatabase, buildManyUsers } from '../fixtures';
-import webServer from '../../src/bootstrap';
+
+import { Config } from '../../src/shared/config';
+import { CompositionRoot } from '../../src/shared/composition-root';
+import { ErrorTypes, ExceptionTypes } from '../../src/shared/errors';
+
 import { CreateUserBuilder } from '../../../shared/tests/builders/create-user-builder';
 import { type CreateUserInput } from '../../../shared/src';
-import { ErrorTypes, ExceptionTypes } from '../../src/shared/errors';
 
 const feature = loadFeature(
   path.join(__dirname, '../../../shared/tests/features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
-  const app = webServer.app;
+  const config: Config = new Config('test:e2e');
+  let app: Express;
+
+  beforeAll(async () => {
+    const composition = CompositionRoot.createCompositionRoot(config);
+    const database = composition.getDatabase();
+    const server = composition.getWebServer();
+    app = server.getApp();
+
+    await database.connect();
+  });
 
   beforeEach(async () => {
     await resetDatabase();
