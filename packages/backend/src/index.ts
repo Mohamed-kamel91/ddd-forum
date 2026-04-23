@@ -1,5 +1,3 @@
-import server from './bootstrap';
+import { bootstrap } from './shared/bootstrap';
 
-const PORT: number = Number(process.env.PORT || 3000);
-
-server.start(PORT);
+bootstrap();
