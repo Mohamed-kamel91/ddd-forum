@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-import { prisma } from '../../src/database';
+import { database } from '../../src/shared/bootstrap';
 import { CreateUserInput } from '../../../shared/src';
 
 export class UserBuilder {
@@ -33,10 +33,12 @@ export class UserBuilder {
   }
 
   public async build() {
+    const dbConnection = database.getConnection();
+    
     const { email, firstName, lastName, username, password } =
       this.user;
 
-    const user = await prisma.user.create({
+    const user = await dbConnection.user.create({
       data: {
         email,
         firstName,
@@ -53,9 +55,11 @@ export class UserBuilder {
 export async function buildManyUsers(
   users: Partial<CreateUserInput>[],
 ) {
-  return prisma.$transaction(
+  const dbConnection = database.getConnection();
+
+  return dbConnection.$transaction(
     users.map((user) =>
-      prisma.user.create({
+      dbConnection.user.create({
         data: {
           email: faker.internet.email(),
           firstName: faker.person.firstName(),
