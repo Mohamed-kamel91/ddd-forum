@@ -1,10 +1,11 @@
 import express from 'express';
 
-import { UserService } from '../services';
-import { CreateUserDTO } from '../dtos/user-dtos';
-import { parseUserForResponse } from '../shared/utils';
+import { UserService } from './user-service';
+import { CreateUserDTO } from './user-dtos';
 
-class UserController {
+import { parseUserForResponse } from '../../shared/utils';
+
+export class UserController {
   constructor(private userService: UserService) {}
 
   public createUser = async (
@@ -48,5 +49,3 @@ class UserController {
     }
   };
 }
-
-export default UserController;

@@ -1,25 +1,30 @@
 import { Config } from '../config';
 import { WebServer } from '../http';
 import { Database, prisma } from '../database';
+
 import {
-  UserController,
-  PostController,
-  MarketingController,
-} from '../../controllers';
-import {
-  UserService,
-  PostService,
-  MarketingService,
   ContactListAPI,
-} from '../../services';
-import { UserRepo, PostRepo } from '../../persistence';
+  MarketingService,
+  MarketingController,
+  MarketingRouter,
+} from '../../modules/marketing';
+
+import {
+  PostRepo,
+  PostService,
+  PostController,
+  PostRouter,
+} from '../../modules/post';
+
+import {
+  UserRepo,
+  UserService,
+  UserController,
+  UserRouter,
+} from '../../modules/user';
+
 import { ErrorHandler, errorHandler } from '../errors';
 import { BaseRouter } from '../http/base-router';
-import {
-  UserRouter,
-  PostRouter,
-  MarketingRouter,
-} from '../../routers';
 
 export class CompositionRoot {
   private static instance: CompositionRoot | null = null;

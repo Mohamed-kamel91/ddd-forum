@@ -1,9 +1,9 @@
-import { CreateUserInput } from '@dddforum/shared';
 import {
   PrismaClient,
   Member,
   User,
-} from '../generated/prisma/client';
+} from '../../generated/prisma/client';
+import { CreateUserInput } from '@dddforum/shared';
 
 export interface IUserRepo {
   save(

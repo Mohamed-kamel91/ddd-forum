@@ -3,7 +3,7 @@ import {
   BadRequestError,
   ConflictError,
   ExceptionTypes,
-} from '../shared/errors';
+} from '../../shared/errors';
 
 export class UserNotFoundException extends NotFoundError {
   constructor() {

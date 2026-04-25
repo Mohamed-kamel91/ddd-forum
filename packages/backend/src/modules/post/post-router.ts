@@ -1,5 +1,5 @@
-import { BaseRouter } from '../shared/http/base-router';
-import { PostController } from '../controllers';
+import { PostController } from './post-controller';
+import { BaseRouter } from '../../shared/http/base-router';
 
 export class PostRouter extends BaseRouter {
   public readonly basePath: string = '/posts';

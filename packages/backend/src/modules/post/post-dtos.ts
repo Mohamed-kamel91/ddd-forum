@@ -3,7 +3,7 @@ import { Request } from 'express';
 import {
   InvalidRequestQueryParamsException,
   MissingRequestQueryParamsException,
-} from '../shared/errors/validation-errors';
+} from '../../shared/errors/validation-errors';
 
 export class getPostsDTO {
   private constructor(public sort: string) {}

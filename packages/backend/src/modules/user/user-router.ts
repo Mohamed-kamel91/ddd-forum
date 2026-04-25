@@ -1,5 +1,5 @@
-import { BaseRouter } from '../shared/http/base-router';
-import { UserController } from '../controllers';
+import { UserController } from './user-controller';
+import { BaseRouter } from '../../shared/http/base-router';
 
 export class UserRouter extends BaseRouter {
   public readonly basePath: string = '/users';

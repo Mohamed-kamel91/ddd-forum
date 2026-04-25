@@ -3,17 +3,17 @@ import { Express } from 'express';
 import request from 'supertest';
 import { defineFeature, loadFeature } from 'jest-cucumber';
 
-import { resetDatabase, buildManyUsers } from '../fixtures';
+import { resetDatabase, buildManyUsers } from '../../fixtures';
 
-import { Config } from '../../src/shared/config';
-import { CompositionRoot } from '../../src/shared/composition-root';
-import { ErrorTypes, ExceptionTypes } from '../../src/shared/errors';
+import { Config } from '../../../src/shared/config';
+import { CompositionRoot } from '../../../src/shared/composition-root';
+import { ErrorTypes, ExceptionTypes } from '../../../src/shared/errors';
 
-import { CreateUserBuilder } from '../../../shared/tests/builders/create-user-builder';
-import { type CreateUserInput } from '../../../shared/src';
+import { CreateUserBuilder } from '../../../../shared/tests/builders/create-user-builder';
+import { type CreateUserInput } from '../../../../shared/src';
 
 const feature = loadFeature(
-  path.join(__dirname, '../../../shared/tests/features/registration.feature'),
+  path.join(__dirname, '../../../../shared/tests/features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
