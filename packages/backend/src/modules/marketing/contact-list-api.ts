@@ -1,4 +1,4 @@
-class ContactListAPI {
+export class ContactListAPI {
   async addEmailToList(
     email: string,
   ): Promise<{ email: string; subscribed: boolean }> {
@@ -11,4 +11,3 @@ class ContactListAPI {
   }
 }
 
-export default ContactListAPI;
