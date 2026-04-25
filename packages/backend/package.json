@@ -30,7 +30,7 @@
     "prettier-watch:default": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "test:dev": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --watchAll",
-    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose tests/e2e/ --runInBand"
+    "test:e2e": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --verbose tests/features/ --runInBand"
   },
   "husky": {
     "hooks": {
