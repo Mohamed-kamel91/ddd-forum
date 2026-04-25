@@ -1,8 +1,8 @@
-import { getMissingKeys, isObject } from '../shared/utils';
+import { getMissingKeys, isObject } from '../../shared/utils';
 import {
   InvalidRequestBodyException,
   MissingRequestBodyException,
-} from '../shared/errors';
+} from '../../shared/errors';
 import { CreateUserInput } from '@dddforum/shared';
 
 export class CreateUserDTO {

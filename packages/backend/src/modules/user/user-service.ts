@@ -1,12 +1,12 @@
-import { type IUserRepo } from '../persistence';
-import { CreateUserDTO } from '../dtos/user-dtos';
+import { type IUserRepo } from './user-repo';
+import { CreateUserDTO } from './user-dtos';
 import {
   EmailAlreadyTakenException,
   UsernameAlreadyTakenException,
   UserNotFoundException,
-} from '../exceptions/user-exceptions';
+} from './user-exceptions';
 
-class UserService {
+export class UserService {
   constructor(private userRepo: IUserRepo) {}
 
   public async createUser(dto: CreateUserDTO) {
@@ -41,5 +41,3 @@ class UserService {
     return user;
   }
 }
-
-export default UserService;
