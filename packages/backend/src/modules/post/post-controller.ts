@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { PostService } from '../services';
-import { getPostsDTO } from '../dtos/post-dtos';
+import { PostService } from './post-service';
+import { getPostsDTO } from './post-dtos';
 
-class PostController {
+export class PostController {
   constructor(private postService: PostService) {}
 
   public getPosts = async (
@@ -25,5 +25,3 @@ class PostController {
     }
   };
 }
-
-export default PostController;

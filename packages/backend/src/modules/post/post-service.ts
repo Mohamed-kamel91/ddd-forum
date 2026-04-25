@@ -1,7 +1,7 @@
-import { getPostsDTO } from '../dtos/post-dtos';
-import { type IPostRepo } from '../persistence/post-repo';
+import { getPostsDTO } from './post-dtos';
+import { type IPostRepo } from './post-repo';
 
-class PostService {
+export class PostService {
   constructor(private postRepo: IPostRepo) {}
 
   public async getPosts(dto: getPostsDTO) {
@@ -10,5 +10,3 @@ class PostService {
     return posts;
   }
 }
-
-export default PostService;

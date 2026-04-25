@@ -1,4 +1,4 @@
-import { PrismaClient, Post } from '../generated/prisma/client';
+import { PrismaClient, Post } from '../../generated/prisma/client';
 
 export interface IPostRepo {
   getAll: (sort: string) => Promise<Post[]>;
