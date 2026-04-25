@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { MarketingService } from '../services';
-import { AddEmailToListDTO } from '../dtos/marketing-dtos';
+import { MarketingService } from './marketing-service';
+import { AddEmailToListDTO } from './marketing-dtos';
 
-class MarketingController {
+export class MarketingController {
   constructor(private marketingService: MarketingService) {}
 
   public addEmailToList = async (
@@ -25,5 +25,3 @@ class MarketingController {
     }
   };
 }
-
-export default MarketingController;

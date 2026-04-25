@@ -1,8 +1,8 @@
 import {
   MissingRequestBodyException,
   InvalidRequestBodyException,
-} from '../shared/errors/validation-errors';
-import { getMissingKeys, isObject } from '../shared/utils';
+} from '../../shared/errors';
+import { getMissingKeys, isObject } from '../../shared/utils';
 
 export class AddEmailToListDTO {
   private constructor(public email: string) {}
@@ -13,7 +13,7 @@ export class AddEmailToListDTO {
     }
 
     const requiredKeys = ['email'];
-    const missingKeys = getMissingKeys(body, requiredKeys)
+    const missingKeys = getMissingKeys(body, requiredKeys);
 
     if (missingKeys.length > 0) {
       throw new InvalidRequestBodyException(requiredKeys);

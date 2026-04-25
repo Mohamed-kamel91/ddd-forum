@@ -1,7 +1,7 @@
-import { ContactListAPI } from '.';
-import { AddEmailToListDTO } from '../dtos/marketing-dtos';
+import { AddEmailToListDTO } from './marketing-dtos';
+import { ContactListAPI } from './contact-list-api';
 
-class MarketingService {
+export class MarketingService {
   constructor(private contactListAPI: ContactListAPI) {}
 
   public async addEmailToList(dto: AddEmailToListDTO) {
@@ -12,5 +12,3 @@ class MarketingService {
     return result;
   }
 }
-
-export default MarketingService;
