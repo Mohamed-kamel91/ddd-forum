@@ -2,48 +2,22 @@ import { Config } from '../config';
 import { WebServer } from '../http';
 import { Database, prisma } from '../database';
 
-import {
-  ContactListAPI,
-  MarketingService,
-  MarketingController,
-  MarketingRouter,
-} from '../../modules/marketing';
+import { MarketingModule } from '../../modules/marketing';
+import { PostModule } from '../../modules/post';
+import { UserModule } from '../../modules/user';
 
-import {
-  PostRepo,
-  PostService,
-  PostController,
-  PostRouter,
-} from '../../modules/post';
-
-import {
-  UserRepo,
-  UserService,
-  UserController,
-  UserRouter,
-} from '../../modules/user';
-
-import { ErrorHandler, errorHandler } from '../errors';
-import { BaseRouter } from '../http/base-router';
+import { errorHandler } from '../errors';
 
 export class CompositionRoot {
   private static instance: CompositionRoot | null = null;
 
   private config: Config;
   private database: Database;
-  private errorHandler: ErrorHandler;
 
-  private userRepo: UserRepo;
-  private userService: UserService;
-  private userController: UserController;
-  private postRepo: PostRepo;
-  private postService: PostService;
-  private postController: PostController;
-  private contactListAPI: ContactListAPI;
-  private marketingService: MarketingService;
-  private marketingController: MarketingController;
+  private userModule: UserModule;
+  private postModule: PostModule;
+  private marketingModule: MarketingModule;
 
-  private routers: BaseRouter[];
   private webServer: WebServer;
 
   public static createCompositionRoot(config: Config) {
@@ -57,22 +31,15 @@ export class CompositionRoot {
   private constructor(config: Config) {
     this.config = config;
     this.database = this.createDatabase();
-    this.errorHandler = errorHandler;
 
-    this.userRepo = this.createUserRepo();
-    this.userService = this.createUserService();
-    this.userController = this.createUserController();
+    this.userModule = this.createUserModule();
+    this.postModule = this.createPostModule();
+    this.marketingModule = this.createMarektingModule();
 
-    this.postRepo = this.createPostRepo();
-    this.postService = this.createPostService();
-    this.postController = this.createPostController();
-
-    this.contactListAPI = this.createContactListAPI();
-    this.marketingService = this.createMarketingService();
-    this.marketingController = this.createMarketingController();
-
-    this.routers = this.createRouters();
     this.webServer = this.createWebServer();
+
+    this.mountRoutes();
+    this.attachErrorHandler();
   }
 
   public getWebServer() {
@@ -89,67 +56,32 @@ export class CompositionRoot {
 
   private createWebServer() {
     const config = { port: 3000, env: this.config.env };
-    return new WebServer(config, this.routers, this.errorHandler);
+    return new WebServer(config);
   }
 
   private createDatabase() {
     return new Database(prisma);
   }
 
-  private createUserRepo() {
-    const prisma = this.database.getConnection();
-    return new UserRepo(prisma);
+  private createUserModule() {
+    return UserModule.build(this.database);
   }
 
-  private createUserService() {
-    const userRepo = this.userRepo;
-    return new UserService(userRepo);
+  private createPostModule() {
+    return PostModule.build(this.database);
   }
 
-  private createUserController() {
-    const userService = this.userService;
-    return new UserController(userService);
+  private createMarektingModule() {
+    return MarketingModule.build();
   }
 
-  private createPostRepo() {
-    const prisma = this.database.getConnection();
-    return new PostRepo(prisma);
+  private mountRoutes() {
+    this.userModule.mountRouter(this.webServer);
+    this.postModule.mountRouter(this.webServer);
+    this.marketingModule.mountRouter(this.webServer);
   }
 
-  private createPostService() {
-    const postRepo = this.postRepo;
-    return new PostService(postRepo);
-  }
-
-  private createPostController() {
-    const postService = this.postService;
-    return new PostController(postService);
-  }
-
-  private createContactListAPI() {
-    return new ContactListAPI();
-  }
-
-  private createMarketingService() {
-    const contactListAPI = this.contactListAPI;
-    return new MarketingService(contactListAPI);
-  }
-
-  private createMarketingController() {
-    const marketingService = this.marketingService;
-    return new MarketingController(marketingService);
-  }
-
-  private createRouters() {
-    const userController = this.userController;
-    const userRouter = new UserRouter(userController);
-
-    const postController = this.postController;
-    const postRouter = new PostRouter(postController);
-
-    const marketingController = this.marketingController;
-    const marketingRouter = new MarketingRouter(marketingController);
-
-    return [userRouter, postRouter, marketingRouter];
+  private attachErrorHandler() {
+    this.webServer.useErrorHandler(errorHandler);
   }
 }

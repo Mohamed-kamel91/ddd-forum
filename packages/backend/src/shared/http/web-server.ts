@@ -2,7 +2,6 @@ import { Server as HttpServer } from 'http';
 import express, { Express } from 'express';
 import cors from 'cors';
 
-import { BaseRouter } from './base-router';
 import { ErrorHandler } from '../errors';
 
 interface WebServerConfig {
@@ -16,17 +15,26 @@ export class WebServer {
 
   constructor(
     private config: WebServerConfig,
-    private routers: BaseRouter[],
-    private errorHandler: ErrorHandler,
   ) {
     this.app = express();
     this.addMiddlewares();
-    this.registerRoutes();
-    this.setUpErrorHandler();
   }
 
   public getApp() {
     return this.app;
+  }
+
+  public mountRouter(path: string, router: express.Router): void {
+    this.app.use(path, router);
+  }
+
+  public useErrorHandler(errorHandler: ErrorHandler) {
+    this.app.use(errorHandler);
+  }
+
+  private addMiddlewares(): void {
+    this.app.use(express.json());
+    this.app.use(cors());
   }
 
   public start() {
@@ -66,22 +74,6 @@ export class WebServer {
         resolve('Server stopped');
       });
     });
-  }
-
-  private addMiddlewares(): void {
-    this.app.use(express.json());
-    this.app.use(cors());
-  }
-
-  private registerRoutes(): void {
-    this.routers.forEach((router) => {
-      router.register();
-      this.app.use(router.basePath, router.getRouter());
-    });
-  }
-
-  private setUpErrorHandler() {
-    this.app.use(this.errorHandler);
   }
 
   private enableGracefulShutdown(httpServer: HttpServer): void {
