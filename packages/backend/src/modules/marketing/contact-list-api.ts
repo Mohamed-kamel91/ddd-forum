@@ -1,7 +1,7 @@
+import { EmailSubscription } from '@dddforum/shared/api/marketing';
+
 export class ContactListAPI {
-  async addEmailToList(
-    email: string,
-  ): Promise<{ email: string; subscribed: boolean }> {
+  async addEmailToList(email: string): Promise<EmailSubscription> {
     // Do the actual work
     console.log(
       `MailchimpContactList: Adding ${email} list... for production usage.`,
@@ -10,4 +10,3 @@ export class ContactListAPI {
     return { email, subscribed: true };
   }
 }
-
