@@ -1,5 +1,0 @@
-export const ErrorTypes = {
-  VALIDATION_ERROR: 'VALIDATION_ERROR',
-  SERVER_ERROR: 'SERVER_ERROR',
-  CLIENT_ERROR: 'CLIENT_ERROR',
-} as const;
