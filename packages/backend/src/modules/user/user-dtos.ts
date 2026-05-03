@@ -3,16 +3,11 @@ import {
   InvalidRequestBodyException,
   MissingRequestBodyException,
 } from '../../shared/errors';
-import { CreateUserInput } from '@dddforum/shared';
+
+import { CreateUserInput } from '@dddforum/shared/api/user';
 
 export class CreateUserDTO {
-  private constructor(
-    public email: string,
-    public firstName: string,
-    public lastName: string,
-    public username: string,
-    public password: string,
-  ) {}
+  private constructor(public props: CreateUserInput) {}
 
   static fromRequest(body: unknown) {
     if (!isObject<CreateUserInput>(body)) {
@@ -35,12 +30,32 @@ export class CreateUserDTO {
 
     const { email, firstName, lastName, username, password } = body;
 
-    return new CreateUserDTO(
+    return new CreateUserDTO({
       email,
       firstName,
       lastName,
       username,
       password,
-    );
+    });
+  }
+
+  get email() {
+    return this.props.email;
+  }
+
+  get firstName() {
+    return this.props.firstName;
+  }
+
+  get lastName() {
+    return this.props.lastName;
+  }
+
+  get username() {
+    return this.props.username;
+  }
+
+  get password() {
+    return this.props.password;
   }
 }

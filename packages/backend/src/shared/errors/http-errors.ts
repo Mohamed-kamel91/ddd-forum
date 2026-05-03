@@ -1,3 +1,5 @@
+import { GenericErrors } from "@dddforum/shared/errors";
+
 export class HttpError extends Error {
   constructor(
     public message: string,
@@ -40,7 +42,7 @@ export class ConflictError extends HttpError {
 export class InternalServerError extends HttpError {
   constructor(
     message: string = 'Something went wrong on our end',
-    code: string = 'INTERNAL_SERVER_ERROR',
+    code: string = GenericErrors.SERVER_ERROR,
   ) {
     super(message, 500, code);
   }
