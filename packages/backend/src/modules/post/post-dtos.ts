@@ -5,8 +5,10 @@ import {
   MissingRequestQueryParamsException,
 } from '../../shared/errors/validation-errors';
 
+import { GetPostParams } from '@dddforum/shared/api/post';
+
 export class getPostsDTO {
-  private constructor(public sort: string) {}
+  private constructor(public props: GetPostParams) {}
 
   static fromRequest(query: Request['query']) {
     const { sort } = query;
@@ -19,6 +21,10 @@ export class getPostsDTO {
       throw new InvalidRequestQueryParamsException(['sort']);
     }
 
-    return new getPostsDTO(sort);
+    return new getPostsDTO({ sort });
+  }
+
+  get sort() {
+    return this.props.sort;
   }
 }
