@@ -1,0 +1,5 @@
+export const GenericErrors = {
+  VALIDATION_ERROR: 'VALIDATION_ERROR',
+  SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+  CLIENT_ERROR: 'CLIENT_ERROR',
+} as const;
