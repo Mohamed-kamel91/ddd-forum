@@ -13,12 +13,11 @@ export class CompositionRoot {
 
   private config: Config;
   private database: Database;
+  private webServer: WebServer;
 
   private userModule: UserModule;
   private postModule: PostModule;
   private marketingModule: MarketingModule;
-
-  private webServer: WebServer;
 
   public static createCompositionRoot(config: Config) {
     if (!CompositionRoot.instance) {
@@ -31,15 +30,14 @@ export class CompositionRoot {
   private constructor(config: Config) {
     this.config = config;
     this.database = this.createDatabase();
+    this.webServer = this.createWebServer();
 
     this.userModule = this.createUserModule();
     this.postModule = this.createPostModule();
     this.marketingModule = this.createMarektingModule();
 
-    this.webServer = this.createWebServer();
-
     this.mountRoutes();
-    this.attachErrorHandler();
+    this.useErrorHandler();
   }
 
   public getWebServer() {
@@ -81,7 +79,7 @@ export class CompositionRoot {
     this.marketingModule.mountRouter(this.webServer);
   }
 
-  private attachErrorHandler() {
+  private useErrorHandler() {
     this.webServer.useErrorHandler(errorHandler);
   }
 }
