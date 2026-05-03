@@ -6,7 +6,6 @@ export class PostService {
 
   public async getPosts(dto: getPostsDTO) {
     const posts = await this.postRepo.getAll(dto.sort);
-
     return posts;
   }
 }
