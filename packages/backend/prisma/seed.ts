@@ -4,7 +4,7 @@ import {
   Vote,
   Comment,
 } from '../src/generated/prisma/client';
-import { prisma } from '../src/database';
+import { prisma } from '../src/shared/database';
 
 const initialUsers: User[] = [
   {
