@@ -3,7 +3,10 @@ import express from 'express';
 import { UserService } from './user-service';
 import { CreateUserDTO } from './user-dtos';
 
-import { parseUserForResponse } from '../../shared/utils';
+import {
+  CreateUserResponse,
+  GetUserByEmailResponse,
+} from '@dddforum/shared/api/user';
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -16,15 +19,14 @@ export class UserController {
     try {
       const dto = CreateUserDTO.fromRequest(req.body);
       const data = await this.userService.createUser(dto);
-
-      return res.status(201).json({
-        error: undefined,
+      const response: CreateUserResponse = {
+        error: null,
         data: {
           ...data,
-          user: parseUserForResponse(data.user),
         },
         success: true,
-      });
+      };
+      return res.status(201).json(response);
     } catch (error) {
       next(error);
     }
@@ -37,13 +39,16 @@ export class UserController {
   ) => {
     try {
       const email = req.query.email as string;
-      const data = await this.userService.getUserByEmail(email);
-
-      return res.status(200).json({
-        error: undefined,
-        data: { user: parseUserForResponse(data) },
+      const user = await this.userService.getUserByEmail(email);
+      const response: GetUserByEmailResponse = {
+        error: null,
+        data: {
+          user,
+        },
         success: true,
-      });
+      };
+
+      return res.status(200).json(response);
     } catch (error) {
       next(error);
     }
