@@ -1,2 +1,2 @@
-export * from './api/users';
+export * from './api/user';
 export * from './utils';
