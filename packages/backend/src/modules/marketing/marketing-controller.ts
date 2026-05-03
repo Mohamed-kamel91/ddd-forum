@@ -16,7 +16,7 @@ export class MarketingController {
       const data = await this.marketingService.addEmailToList(dto);
 
       return res.json({
-        error: undefined,
+        error: null,
         data: { subscription: data },
         success: true,
       });
