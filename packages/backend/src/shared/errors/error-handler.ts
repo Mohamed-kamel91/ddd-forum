@@ -22,9 +22,11 @@ export const errorHandler: ErrorRequestHandler = (
 ) => {
   if (err instanceof HttpError) {
     return res.status(err.status).json({
-      data: undefined,
-      error: err.code,
-      message: err.message,
+      data: null,
+      error: {
+        code: err.code,
+        message: err.message,
+      },
       success: false,
     });
   }
