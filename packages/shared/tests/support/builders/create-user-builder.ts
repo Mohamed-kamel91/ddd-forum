@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { type CreateUserInput } from '../../src/api/user';
+import { CreateUserInput } from '../../../src/api/user';
 
 export class CreateUserBuilder {
   private props: CreateUserInput;
