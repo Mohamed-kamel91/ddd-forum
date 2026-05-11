@@ -1,26 +1,34 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
 
 import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '../../generated/prisma/client';
+import { PrismaClient } from './prisma/generated/client';
 
-const connectionString = `${process.env.DATABASE_URL}`;
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+dotenv.config({ path: path.resolve(__dirname, '../../../.env') });
 
-class Database {
-  constructor(private prisma: PrismaClient) {}
+export class Database {
+  private client: PrismaClient;
+
+  constructor() {
+    this.client = this.createClient();
+  }
 
   public getConnection() {
-    return this.prisma;
+    return this.client;
+  }
+
+  private createClient() {
+    const connectionString = `${process.env.DATABASE_URL}`;
+    const adapter = new PrismaPg({ connectionString });
+    const client = new PrismaClient({ adapter });
+    return client;
   }
 
   public async connect() {
-    await this.prisma.$connect();
+    await this.client.$connect();
   }
 
   public async disconnect() {
-    await this.prisma.$disconnect();
+    await this.client.$disconnect();
   }
 }
-
-export { prisma, Database };
