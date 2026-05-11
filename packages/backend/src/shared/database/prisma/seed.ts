@@ -1,10 +1,7 @@
-import {
-  Post,
-  User,
-  Vote,
-  Comment,
-} from '../src/generated/prisma/client';
-import { prisma } from '../src/shared/database';
+import { Post, User, Vote, Comment } from './generated/client';
+import { database } from '../../bootstrap';
+
+const prisma = database.getConnection();
 
 const initialUsers: User[] = [
   {
