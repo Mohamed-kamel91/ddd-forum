@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
-import { database } from '../../src/shared/bootstrap';
-import { CreateUserInput } from '../../../shared/src';
+import { CreateUserInput } from '../../../src/api/user';
+import { database } from '../../../../backend/src/shared/bootstrap';
 
 export class UserBuilder {
   private user: CreateUserInput = {
@@ -32,9 +32,14 @@ export class UserBuilder {
     return this;
   }
 
+  public withPassword(password: string) {
+    this.user.password = password;
+    return this;
+  }
+
   public async build() {
     const dbConnection = database.getConnection();
-    
+
     const { email, firstName, lastName, username, password } =
       this.user;
 
