@@ -1,19 +1,23 @@
-// import { Rings } from "react-loader-spinner";
+import { ThreeDots } from 'react-loader-spinner';
 
-export const OverlaySpinner = ({ isActive }: { isActive: boolean }) =>
-  isActive ? (
+export const OverlaySpinner = ({
+  isActive,
+}: {
+  isActive: boolean;
+}) => {
+  return isActive ? (
     <div className="overlay-spinner">
-      {/* <Rings
+      <ThreeDots
         height="80"
         width="80"
-        color="#4fa94d"
-        radius="6"
+        color="#000000"
+        ariaLabel="three-dots-loading"
         wrapperStyle={{}}
-        wrapperClass=""
+        wrapperClass="wrapper-class"
         visible={true}
-        ariaLabel="rings-loading"
-      /> */}
+      />
     </div>
   ) : (
-    ""
+    ''
   );
+};
