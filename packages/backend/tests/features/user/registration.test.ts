@@ -1,28 +1,27 @@
 import path from 'path';
 import { defineFeature, loadFeature } from 'jest-cucumber';
 
-import { resetDatabase, buildManyUsers } from '../../fixtures';
-
 import { Config } from '../../../src/shared/config';
 import { CompositionRoot } from '../../../src/shared/composition-root';
 import { Database } from '../../../src/shared/database';
 import { WebServer } from '../../../src/shared/http';
 
+import { sharedTestRoot } from '../../../../shared/src/paths';
+import { CreateUserBuilder } from '../../../../shared/tests/support/builders';
+import {
+  buildManyUsers,
+  resetDatabase,
+} from '../../../../shared/tests/support/fixtures';
 import { createAPIClient } from '../../../../shared/src/api';
-import { CreateUserBuilder } from '../../../../shared/tests/builders/create-user-builder';
 import type {
   CreateUserResponse,
   CreateUserInput,
 } from '../../../../shared/src/api/user';
 import type { AddEmailToListResponse } from '../../../../shared/src/api/marketing';
-import { UserErrors } from '../../../../shared/src/errors/user';
-import { GenericErrors } from '../../../../shared/src/errors';
+import { UserErrors, GenericErrors } from '../../../../shared/src/errors';
 
 const feature = loadFeature(
-  path.join(
-    __dirname,
-    '../../../../shared/tests/features/registration.feature',
-  ),
+  path.join(path.join(sharedTestRoot, 'features/registration.feature')),
 );
 
 defineFeature(feature, (test) => {

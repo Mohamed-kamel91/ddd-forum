@@ -1,4 +1,4 @@
-import { database } from '../../src/shared/bootstrap';
+import { database } from '../../../../backend/src/shared/bootstrap';
 
 async function resetDatabase() {
   const dbConnection = database.getConnection();
@@ -20,7 +20,7 @@ async function resetDatabase() {
   } catch (error) {
     console.error(error);
   } finally {
-    await dbConnection.$disconnect();
+    await database.disconnect();
   }
 }
 

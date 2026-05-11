@@ -140,4 +140,4 @@ vite.config.ts.timestamp-*
 
 .agents
 migration_lock.toml
-src/**/generated/prisma/
+src/**/generated

@@ -1,8 +1,8 @@
-export * from './reset';
+import { resetDatabase } from './resetDatabase';
 import { UserBuilder, buildManyUsers } from './user-builder';
 
 function aUser() {
   return new UserBuilder();
 }
 
-export { aUser, UserBuilder, buildManyUsers };
+export { aUser, UserBuilder, buildManyUsers, resetDatabase };

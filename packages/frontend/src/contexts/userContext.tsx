@@ -1,8 +1,16 @@
 // UserContext.tsx
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  ReactNode,
+} from 'react';
 
 // Define the shape of your user data
 export interface UserData {
+  firstName: string;
+  lastName: string;
+  email: string;
   username: string;
   // ... other relevant user data
 }
@@ -22,7 +30,9 @@ export const useUser = () => {
 };
 
 // Context provider component
-export const UserProvider: React.FC<{children: ReactNode }> = ({ children }) => {
+export const UserProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<UserData | null>(null);
 
   return (

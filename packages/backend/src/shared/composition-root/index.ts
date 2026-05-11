@@ -1,6 +1,6 @@
 import { Config } from '../config';
 import { WebServer } from '../http';
-import { Database, prisma } from '../database';
+import { Database } from '../database';
 
 import { MarketingModule } from '../../modules/marketing';
 import { PostModule } from '../../modules/post';
@@ -58,7 +58,7 @@ export class CompositionRoot {
   }
 
   private createDatabase() {
-    return new Database(prisma);
+    return new Database();
   }
 
   private createUserModule() {
