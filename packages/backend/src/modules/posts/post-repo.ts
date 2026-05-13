@@ -1,5 +1,5 @@
-import { PrismaClient } from '../../generated/prisma/client';
 import { Post } from '@dddforum/shared/api/post';
+import { PrismaClient } from '../../shared/database/prisma/generated/client';
 
 export interface IPostRepo {
   getAll: (sort: string) => Promise<Post[]>;

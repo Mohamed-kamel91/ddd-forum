@@ -3,8 +3,8 @@ import { WebServer } from '../http';
 import { Database } from '../database';
 
 import { MarketingModule } from '../../modules/marketing';
-import { PostModule } from '../../modules/post';
-import { UserModule } from '../../modules/user';
+import { PostModule } from '../../modules/posts';
+import { UserModule } from '../../modules/users';
 
 import { errorHandler } from '../errors';
 
