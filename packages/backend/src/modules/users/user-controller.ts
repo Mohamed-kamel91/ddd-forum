@@ -1,12 +1,13 @@
 import express from 'express';
 
-import { UserService } from './user-service';
-import { CreateUserCommand } from './user-command';
-
 import {
   CreateUserResponse,
   GetUserByEmailResponse,
 } from '@dddforum/shared/api/user';
+
+import type { UserService } from './user-service';
+import { CreateUserCommand } from './user-command';
+
 
 export class UserController {
   constructor(private userService: UserService) {}
