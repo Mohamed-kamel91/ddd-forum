@@ -1,17 +1,23 @@
+import type { IPostRepo } from './ports/post-repo';
+import { PrismaPostRepo } from './adapters/prisma-post-repo';
+import { PostService } from './post-service';
+import { PostController } from './post-controller';
+import { PostRouter } from './post-router';
 import { Database } from '../../shared/database';
 import { WebServer } from '../../shared/http';
-import { PostController } from './post-controller';
-import { PostRepo } from './post-repo';
-import { PostRouter } from './post-router';
-import { PostService } from './post-service';
+import type { Config } from '../../shared/config';
+import { InMemoryPostRepo } from './adapters/in-memory-post-repo';
 
 export class PostModule {
-  private postRepo: PostRepo;
+  private postRepo: IPostRepo;
   private postService: PostService;
   private postController: PostController;
   private postRouter: PostRouter;
 
-  private constructor(private database: Database) {
+  private constructor(
+    private database: Database,
+    private config: Config,
+  ) {
     this.postRepo = this.createPostRepo();
     this.postService = this.createPostService();
     this.postController = this.createPostController();
@@ -20,8 +26,8 @@ export class PostModule {
     this.setupRoutes();
   }
 
-  static build(database: Database) {
-    return new PostModule(database);
+  static build(database: Database, config: Config) {
+    return new PostModule(database, config);
   }
 
   public getRouter() {
@@ -34,13 +40,29 @@ export class PostModule {
     webServer.mountRouter(path, router);
   }
 
+  public getPostController() {
+    return this.postController;
+  }
+
+  public getPostService() {
+    return this.postService;
+  }
+
+  public getPostRepo() {
+    return this.postRepo;
+  }
+
   private setupRoutes() {
     this.postRouter.register();
   }
 
   private createPostRepo() {
+    if (this.config.getScript() === 'test:unit') {
+      return new InMemoryPostRepo();
+    }
+
     const prisma = this.database.getConnection();
-    return new PostRepo(prisma);
+    return new PrismaPostRepo(prisma);
   }
 
   private createPostService() {
