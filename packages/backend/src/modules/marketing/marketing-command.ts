@@ -4,7 +4,7 @@ import {
 } from '../../shared/errors';
 import { getMissingKeys, isObject } from '../../shared/utils';
 
-export class AddEmailToListDTO {
+export class AddEmailToListCommand {
   private constructor(public email: string) {}
 
   static fromRequest(body: unknown) {
@@ -19,6 +19,6 @@ export class AddEmailToListDTO {
       throw new InvalidRequestBodyException(requiredKeys);
     }
 
-    return new AddEmailToListDTO(body.email);
+    return new AddEmailToListCommand(body.email);
   }
 }
