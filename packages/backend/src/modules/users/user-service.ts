@@ -1,5 +1,6 @@
-import { type IUserRepo } from './user-repo';
-import { CreateUserDTO } from './user-dtos';
+import { ITransactionalEmailAPI } from '../notifications/ports/transactional-email-api';
+import { type IUserRepo } from './ports/user-repo';
+import { CreateUserCommand } from './user-command';
 import {
   EmailAlreadyTakenException,
   UsernameAlreadyTakenException,
@@ -7,11 +8,14 @@ import {
 } from './user-exceptions';
 
 export class UserService {
-  constructor(private userRepo: IUserRepo) {}
+  constructor(
+    private userRepo: IUserRepo,
+    private emailAPI: ITransactionalEmailAPI,
+  ) {}
 
-  public async createUser(dto: CreateUserDTO) {
+  public async createUser(userdata: CreateUserCommand) {
     const existingUserByEmail = await this.userRepo.getByEmail(
-      dto.email,
+      userdata.email,
     );
 
     if (existingUserByEmail) {
@@ -19,14 +23,20 @@ export class UserService {
     }
 
     const existingUserByUsername = await this.userRepo.getByUsername(
-      dto.username,
+      userdata.username,
     );
 
     if (existingUserByUsername) {
       throw new UsernameAlreadyTakenException();
     }
 
-    const user = await this.userRepo.save(dto);
+    const user = await this.userRepo.save(userdata);
+
+    await this.emailAPI.sendMail({
+      to: user.email,
+      subject: 'Your login details to DDDForum',
+      text: `<br>Welcome to DDDForum. You can login with the following details </br>`,
+    });
 
     return user;
   }
