@@ -1,13 +1,12 @@
 import { Request } from 'express';
 
+import type { GetPostParams } from '@dddforum/shared/api/post';
 import {
   InvalidRequestQueryParamsException,
   MissingRequestQueryParamsException,
-} from '../../shared/errors/validation-errors';
+} from '../../shared/errors';
 
-import { GetPostParams } from '@dddforum/shared/api/post';
-
-export class getPostsDTO {
+export class getPostsQuery {
   private constructor(public props: GetPostParams) {}
 
   static fromRequest(query: Request['query']) {
@@ -21,7 +20,7 @@ export class getPostsDTO {
       throw new InvalidRequestQueryParamsException(['sort']);
     }
 
-    return new getPostsDTO({ sort });
+    return new getPostsQuery({ sort });
   }
 
   get sort() {
