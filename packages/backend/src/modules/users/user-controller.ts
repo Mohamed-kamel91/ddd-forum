@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { UserService } from './user-service';
-import { CreateUserDTO } from './user-dtos';
+import { CreateUserCommand } from './user-command';
 
 import {
   CreateUserResponse,
@@ -17,12 +17,12 @@ export class UserController {
     next: express.NextFunction,
   ) => {
     try {
-      const dto = CreateUserDTO.fromRequest(req.body);
-      const data = await this.userService.createUser(dto);
+      const command = CreateUserCommand.fromRequest(req.body);
+      const user = await this.userService.createUser(command);
       const response: CreateUserResponse = {
         error: null,
         data: {
-          ...data,
+          user,
         },
         success: true,
       };
