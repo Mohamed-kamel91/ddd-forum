@@ -5,14 +5,27 @@ type Environment =
   | 'staging'
   | 'ci';
 
-type Script = 'start' | 'test:unit' | 'test:infra' | 'test:e2e';
+type Script =
+  | 'start'
+  | 'start:dev'
+  | 'test:unit'
+  | 'test:infra'
+  | 'test:e2e';
 
 export class Config {
-  public env: Environment;
-  public script: Script;
+  private readonly env: Environment;
+  private readonly script: Script;
 
   constructor(script: Script) {
     this.env = (process.env.NODE_ENV as Environment) || 'development';
     this.script = script;
+  }
+
+  public getEnvironment() {
+    return this.env;
+  }
+
+  public getScript() {
+    return this.script;
   }
 }
