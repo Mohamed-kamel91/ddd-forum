@@ -1,11 +1,11 @@
-import { getPostsDTO } from './post-dtos';
-import { type IPostRepo } from './post-repo';
+import type { IPostRepo } from './ports/post-repo';
+import type { getPostsQuery } from './post-query';
 
 export class PostService {
   constructor(private postRepo: IPostRepo) {}
 
-  public async getPosts(dto: getPostsDTO) {
-    const posts = await this.postRepo.getAll(dto.sort);
+  public async getPosts(query: getPostsQuery) {
+    const posts = await this.postRepo.getAll(query);
     return posts;
   }
 }
