@@ -1,4 +1,4 @@
-import { CreateUserInput } from '@dddforum/shared/api/user';
+import type { CreateUserInput } from '@dddforum/shared/api/user';
 
 import { getMissingKeys, isObject } from '../../shared/utils';
 import {
