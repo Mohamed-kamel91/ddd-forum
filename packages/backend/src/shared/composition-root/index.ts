@@ -7,6 +7,8 @@ import { PostModule } from '../../modules/posts';
 import { UserModule } from '../../modules/users';
 
 import { errorHandler } from '../errors';
+import { NotificationsModule } from '../../modules/notifications/notification-module';
+import { Application } from '../application';
 
 export class CompositionRoot {
   private static instance: CompositionRoot | null = null;
@@ -15,9 +17,10 @@ export class CompositionRoot {
   private database: Database;
   private webServer: WebServer;
 
-  private userModule: UserModule;
-  private postModule: PostModule;
+  private notificationsModule: NotificationsModule;
   private marketingModule: MarketingModule;
+  private usersModule: UserModule;
+  private postsModule: PostModule;
 
   public static createCompositionRoot(config: Config) {
     if (!CompositionRoot.instance) {
@@ -32,9 +35,10 @@ export class CompositionRoot {
     this.database = this.createDatabase();
     this.webServer = this.createWebServer();
 
-    this.userModule = this.createUserModule();
-    this.postModule = this.createPostModule();
+    this.notificationsModule = this.createNotificationsModule();
     this.marketingModule = this.createMarektingModule();
+    this.usersModule = this.createUsersModule();
+    this.postsModule = this.createPostsModule();
 
     this.mountRoutes();
     this.useErrorHandler();
@@ -52,8 +56,23 @@ export class CompositionRoot {
     return this.database;
   }
 
+  public getApplication(): Application {
+    return {
+      user: this.usersModule.getUserService(),
+      post: this.postsModule.getPostService(),
+      marketing: this.marketingModule.getMarketingService(),
+    };
+  }
+
+  public getRepositories() {
+    return {
+      user: this.usersModule.getUserRepo(),
+      post: this.postsModule.getPostRepo(),
+    };
+  }
+
   private createWebServer() {
-    const config = { port: 3000, env: this.config.env };
+    const config = { port: 3000, env: this.config.getEnvironment() };
     return new WebServer(config);
   }
 
@@ -61,21 +80,27 @@ export class CompositionRoot {
     return new Database();
   }
 
-  private createUserModule() {
-    return UserModule.build(this.database);
+  private createUsersModule() {
+    const emailAPi =
+      this.notificationsModule.getTransactionalEmailAPI();
+    return UserModule.build(this.database, emailAPi, this.config);
   }
 
-  private createPostModule() {
-    return PostModule.build(this.database);
+  private createPostsModule() {
+    return PostModule.build(this.database, this.config);
   }
 
   private createMarektingModule() {
-    return MarketingModule.build();
+    return MarketingModule.build(this.config);
+  }
+
+  private createNotificationsModule() {
+    return NotificationsModule.build(this.config);
   }
 
   private mountRoutes() {
-    this.userModule.mountRouter(this.webServer);
-    this.postModule.mountRouter(this.webServer);
+    this.usersModule.mountRouter(this.webServer);
+    this.postsModule.mountRouter(this.webServer);
     this.marketingModule.mountRouter(this.webServer);
   }
 
