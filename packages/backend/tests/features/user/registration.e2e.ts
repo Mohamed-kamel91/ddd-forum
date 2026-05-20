@@ -18,10 +18,13 @@ import type {
   CreateUserInput,
 } from '../../../../shared/src/api/user';
 import type { AddEmailToListResponse } from '../../../../shared/src/api/marketing';
-import { UserErrors, GenericErrors } from '../../../../shared/src/errors';
+import {
+  UserErrors,
+  GenericErrors,
+} from '../../../../shared/src/errors';
 
 const feature = loadFeature(
-  path.join(path.join(sharedTestRoot, 'features/registration.feature')),
+  path.join(sharedTestRoot, 'features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
@@ -68,9 +71,8 @@ defineFeature(feature, (test) => {
       async () => {
         createUserResponse = await apiClient.user.register(user);
 
-        addEmailToListResponse = await apiClient.marketing.addEmailToList(
-          user.email,
-        );
+        addEmailToListResponse =
+          await apiClient.marketing.addEmailToList(user.email);
       },
     );
 
@@ -131,7 +133,12 @@ defineFeature(feature, (test) => {
     });
   });
 
-  test('Account already created with email', ({ given, when, then, and }) => {
+  test('Account already created with email', ({
+    given,
+    when,
+    then,
+    and,
+  }) => {
     let existingUsers: CreateUserInput[] = [];
     let newUsers: CreateUserInput[] = [];
     let createUserResponses: CreateUserResponse[];
@@ -177,7 +184,9 @@ defineFeature(feature, (test) => {
         createUserResponses.forEach((response) => {
           expect(response.success).toBe(false);
           expect(response.error).toBeDefined();
-          expect(response.error!.code).toBe(UserErrors.EMAIL_ALREADY_TAKEN);
+          expect(response.error!.code).toBe(
+            UserErrors.EMAIL_ALREADY_TAKEN,
+          );
         });
       },
     );
@@ -238,7 +247,9 @@ defineFeature(feature, (test) => {
         createUserResponses.forEach((response) => {
           expect(response.success).toBe(false);
           expect(response.error).toBeDefined();
-          expect(response.error!.code).toBe(UserErrors.USERNAME_ALREADY_TAKEN);
+          expect(response.error!.code).toBe(
+            UserErrors.USERNAME_ALREADY_TAKEN,
+          );
         });
       },
     );
@@ -275,16 +286,24 @@ defineFeature(feature, (test) => {
       response = await apiClient.user.register(invalidUser);
     });
 
-    then('I should see an error notifying me that my input is invalid', () => {
-      expect(response.success).toBe(false);
-      expect(response.error).toBeDefined();
-      expect(response.error!.code).toBe(GenericErrors.VALIDATION_ERROR);
-    });
+    then(
+      'I should see an error notifying me that my input is invalid',
+      () => {
+        expect(response.success).toBe(false);
+        expect(response.error).toBeDefined();
+        expect(response.error!.code).toBe(
+          GenericErrors.VALIDATION_ERROR,
+        );
+      },
+    );
 
-    and('I should not have been sent access to account details', () => {
-      expect(response.success).toBe(false);
-      expect(response.error).toBeDefined();
-      expect(response.data).toBeNull();
-    });
+    and(
+      'I should not have been sent access to account details',
+      () => {
+        expect(response.success).toBe(false);
+        expect(response.error).toBeDefined();
+        expect(response.data).toBeNull();
+      },
+    );
   });
 });
