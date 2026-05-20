@@ -1,14 +1,13 @@
-import { Post } from '@dddforum/shared/api/post';
-import { PrismaClient } from '../../shared/database/prisma/generated/client';
+import type { Post } from '@dddforum/shared/api/post';
 
-export interface IPostRepo {
-  getAll: (sort: string) => Promise<Post[]>;
-}
+import type { IPostRepo } from '../ports/post-repo';
+import type { PrismaClient } from '../../../shared/database/prisma/generated/client';
+import type { getPostsQuery } from '../post-query';
 
-export class PostRepo implements IPostRepo {
+export class PrismaPostRepo implements IPostRepo {
   constructor(private prisma: PrismaClient) {}
 
-  public async getAll(sort: string): Promise<Post[]> {
+  public async getAll(query: getPostsQuery): Promise<Post[]> {
     const posts = await this.prisma.post.findMany({
       include: {
         votes: true, // Include associated votes for each post
@@ -20,7 +19,7 @@ export class PostRepo implements IPostRepo {
         comments: true,
       },
       orderBy: {
-        dateCreated: sort === 'recent' ? 'desc' : 'asc', // Sorts by dateCreated in descending order
+        dateCreated: query.sort === 'recent' ? 'desc' : 'asc', // Sorts by dateCreated in descending order
       },
     });
 
