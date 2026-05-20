@@ -1,17 +1,25 @@
+import type { IUserRepo } from './ports/user-repo';
+import { PrismaUserRepo } from './adapters/prisma-user-repo';
+import { UserService } from './user-service';
+import { UserController } from './user-controller';
+import { UserRouter } from './user-router';
 import { Database } from '../../shared/database';
 import { WebServer } from '../../shared/http';
-import { UserController } from './user-controller';
-import { UserRepo } from './user-repo';
-import { UserRouter } from './user-router';
-import { UserService } from './user-service';
+import type { Config } from '../../shared/config';
+import type { ITransactionalEmailAPI } from '../notifications/ports/transactional-email-api';
+import { InMemoryUserRepo } from './adapters/In-memory-user-repo';
 
 export class UserModule {
-  private userRepo: UserRepo;
+  private userRepo: IUserRepo;
   private userService: UserService;
   private userController: UserController;
   private userRouter: UserRouter;
 
-  private constructor(private database: Database) {
+  private constructor(
+    private database: Database,
+    private emailAPI: ITransactionalEmailAPI,
+    private config: Config,
+  ) {
     this.userRepo = this.createUserRepo();
     this.userService = this.createUserService();
     this.userController = this.createUserController();
@@ -20,12 +28,28 @@ export class UserModule {
     this.setupRoutes();
   }
 
-  static build(database: Database) {
-    return new UserModule(database);
+  static build(
+    database: Database,
+    emailAPI: ITransactionalEmailAPI,
+    config: Config,
+  ) {
+    return new UserModule(database, emailAPI, config);
   }
 
   public getRouter() {
     return this.userRouter.getRouter();
+  }
+
+  public getUserController() {
+    return this.userController;
+  }
+
+  public getUserService() {
+    return this.userService;
+  }
+
+  public getUserRepo() {
+    return this.userRepo;
   }
 
   private setupRoutes() {
@@ -38,19 +62,22 @@ export class UserModule {
     webServer.mountRouter(path, router);
   }
 
-  private createUserRepo() {
-    const prisma = this.database.getConnection();
-    return new UserRepo(prisma);
-  }
-
-  private createUserService() {
-    const userRepo = this.userRepo;
-    return new UserService(userRepo);
-  }
-
   private createUserController() {
     const userService = this.userService;
     return new UserController(userService);
+  }
+
+  private createUserService() {
+    return new UserService(this.userRepo, this.emailAPI);
+  }
+
+  private createUserRepo() {
+    if (this.config.getScript() === 'test:unit') {
+      return new InMemoryUserRepo();
+    }
+
+    const prisma = this.database.getConnection();
+    return new PrismaUserRepo(prisma);
   }
 
   private createUserRouter() {
