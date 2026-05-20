@@ -1,12 +1,12 @@
+import { CreateUserInput } from '@dddforum/shared/api/user';
+
 import { getMissingKeys, isObject } from '../../shared/utils';
 import {
   InvalidRequestBodyException,
   MissingRequestBodyException,
-} from '../../shared/errors';
+} from '../../shared/errors/validation-errors';
 
-import { CreateUserInput } from '@dddforum/shared/api/user';
-
-export class CreateUserDTO {
+export class CreateUserCommand {
   private constructor(public props: CreateUserInput) {}
 
   static fromRequest(body: unknown) {
@@ -30,7 +30,7 @@ export class CreateUserDTO {
 
     const { email, firstName, lastName, username, password } = body;
 
-    return new CreateUserDTO({
+    return new CreateUserCommand({
       email,
       firstName,
       lastName,
