@@ -1,7 +1,7 @@
 import { database } from '../../../shared/bootstrap';
-import { type IPostRepo } from './post-repo';
+import type { IPostRepo } from './post-repo';
 import { PrismaPostRepo } from '../adapters/prisma-post-repo';
-import { type getPostsQuery } from '../post-query';
+import type { getPostsQuery } from '../post-query';
 import { resetDatabase } from '../../../../../shared/tests/support/fixtures';
 
 describe('Post Repository', () => {
