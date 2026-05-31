@@ -1,7 +1,12 @@
 import type { CreateUserInput } from '@dddforum/shared/api/user';
 
-import { getMissingKeys, isObject } from '../../shared/utils';
 import {
+  getMissingKeys,
+  isBetweenLength,
+  isObject,
+} from '../../shared/utils';
+import {
+  InvalidInputException,
   InvalidRequestBodyException,
   MissingRequestBodyException,
 } from '../../shared/errors/validation-errors';
@@ -28,15 +33,26 @@ export class CreateUserCommand {
       throw new InvalidRequestBodyException(missingKeys);
     }
 
-    const { email, firstName, lastName, username, password } = body;
+    return CreateUserCommand.fromProps(body);
+  }
 
-    return new CreateUserCommand({
-      email,
-      firstName,
-      lastName,
-      username,
-      password,
-    });
+  static fromProps(props: CreateUserInput) {
+    const validations = {
+      email: props.email.includes('@'),
+      firstName: isBetweenLength(props.firstName, 2, 16),
+      lastName: isBetweenLength(props.lastName, 2, 25),
+      username: isBetweenLength(props.username, 2, 25),
+    };
+
+    const invalidFields = Object.entries(validations)
+      .filter(([, isValid]) => !isValid)
+      .map(([field]) => field);
+
+    if (invalidFields.length > 0) {
+      throw new InvalidInputException(invalidFields);
+    }
+
+    return new CreateUserCommand(props);
   }
 
   get email() {
