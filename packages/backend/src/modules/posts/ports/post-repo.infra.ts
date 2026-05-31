@@ -16,28 +16,29 @@ describe('Post Repository', () => {
     await resetDatabase();
   });
 
-  describe.each(
-    postRepos.map((repo) => [repo.constructor.name, repo]),
-  )('%s', (_, repo) => {
-    // it('can get recent posts', async () => {
-    //   await new CreateUserBuilder().withPost().build();
-    //   await new CreateUserBuilder().withPost().build();
+  describe.each(postRepos.map((repo) => [repo.constructor.name, repo]))(
+    '%s',
+    (_, repo) => {
+      // it('can get recent posts', async () => {
+      //   await new CreateUserBuilder().withPost().build();
+      //   await new CreateUserBuilder().withPost().build();
 
-    //   const dto = { sort: 'recent' } as getPostsDTO;
+      //   const dto = { sort: 'recent' } as getPostsDTO;
 
-    //   const posts = await repo.getAll(dto);
+      //   const posts = await repo.getAll(dto);
 
-    //   expect(posts).toHaveLength(2);
-    //   expect(posts[0]).toMatchObject({
-    //     title: expect.any(String),
-    //     // whatever shape IPostRepo.getAll should return
-    //   });
-    // });
+      //   expect(posts).toHaveLength(2);
+      //   expect(posts[0]).toMatchObject({
+      //     title: expect.any(String),
+      //     // whatever shape IPostRepo.getAll should return
+      //   });
+      // });
 
-    it('returns empty array when no posts exist', async () => {
-      const dto = { sort: 'recent' } as getPostsQuery;
-      const posts = await repo.getAll(dto);
-      expect(posts).toEqual([]);
-    });
-  });
+      it('returns empty array when no posts exist', async () => {
+        const dto = { sort: 'recent' } as getPostsQuery;
+        const posts = await repo.getAll(dto);
+        expect(posts).toEqual([]);
+      });
+    },
+  );
 });
