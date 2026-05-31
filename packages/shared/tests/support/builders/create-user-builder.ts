@@ -1,5 +1,7 @@
 import { faker } from '@faker-js/faker';
-import { CreateUserInput } from '../../../src/api/user';
+
+import type { CreateUserInput } from '../../../src/api/user';
+import { CreateUserCommand } from '../../../../backend/src/modules/users/user-command';
 
 export class CreateUserBuilder {
   private props: CreateUserInput;
@@ -19,12 +21,12 @@ export class CreateUserBuilder {
     return this;
   }
 
-  public withFirstname(firstname: string) {
+  public withFirstName(firstname: string) {
     this.props.firstName = firstname;
     return this;
   }
 
-  public withLastname(lastname: string) {
+  public withLastName(lastname: string) {
     this.props.lastName = lastname;
     return this;
   }
@@ -41,5 +43,9 @@ export class CreateUserBuilder {
 
   public build() {
     return this.props;
+  }
+
+  public buildCommand() {
+    return CreateUserCommand.fromProps(this.props);
   }
 }
