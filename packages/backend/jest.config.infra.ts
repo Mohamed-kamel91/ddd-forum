@@ -7,4 +7,5 @@ export default async (): Promise<JestConfigWithTsJest> => ({
     '^.+\\.(t|j)sx?$': ['ts-jest', { diagnostics: false }],
   },
   maxWorkers: 1,
+  setupFilesAfterEnv: ['<rootDir>/tests/support/setup.ts'],
 });
