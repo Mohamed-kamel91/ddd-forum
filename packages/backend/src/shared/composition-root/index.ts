@@ -71,6 +71,14 @@ export class CompositionRoot {
     };
   }
 
+  public getContactListAPI() {
+    return this.marketingModule.getContactListAPI();
+  }
+
+  public getTransactionalEmailAPI() {
+    return this.notificationsModule.getTransactionalEmailAPI();
+  }
+
   private createWebServer() {
     const config = { port: 3000, env: this.config.getEnvironment() };
     return new WebServer(config);
