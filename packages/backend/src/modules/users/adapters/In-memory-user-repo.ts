@@ -2,24 +2,39 @@ import type { User } from '@dddforum/shared/api/user';
 
 import type { CreateUserCommand } from '../user-command';
 import type { IUserRepo } from '../ports/user-repo';
+import { Spy } from '../../../shared/test-doubles/spy';
 
-export class InMemoryUserRepo implements IUserRepo {
+export class InMemoryUserRepo
+  extends Spy<IUserRepo>
+  implements IUserRepo
+{
   private users: User[];
   private nextId = 1;
 
   constructor() {
+    super();
     this.users = [];
   }
 
   public save(user: CreateUserCommand): Promise<User> {
+    const { email, firstName, lastName, username, password } = user;
+
+    this.addCall('save', [user]);
+
     const newUser = {
       id: this.nextId++,
-      ...user.props,
+      email,
+      firstName,
+      lastName,
+      username,
+      password,
     };
 
     this.users.push(newUser);
 
-    return Promise.resolve({ ...newUser });
+    const { password: _, ...safeUser } = newUser;
+
+    return Promise.resolve({ ...safeUser });
   }
 
   public getById(id: number): Promise<User | null> {
@@ -74,5 +89,6 @@ export class InMemoryUserRepo implements IUserRepo {
 
   public async reset() {
     this.users = [];
+    this.calls = [];
   }
 }
