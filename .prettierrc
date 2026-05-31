@@ -8,7 +8,13 @@
   "endOfLine": "lf",
   "overrides": [
     {
-      "files": ["**/*.test.{js,jsx,ts,tsx}"],
+      "files": [
+        "**/*.test.{js,jsx,ts,tsx}",
+        "**/*.spec.{js,jsx,ts,tsx}",
+        "**/*.unit.{js,jsx,ts,tsx}",
+        "**/*.infra.{js,jsx,ts,tsx}",
+        "**/*.e2e.{js,jsx,ts,tsx}"
+      ],
       "options": {
         "printWidth": 80
       }
