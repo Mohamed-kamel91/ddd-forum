@@ -1,12 +1,13 @@
 import express from 'express';
 
-import { UserService } from './user-service';
-import { CreateUserDTO } from './user-dtos';
-
 import {
   CreateUserResponse,
   GetUserByEmailResponse,
 } from '@dddforum/shared/api/user';
+
+import type { UserService } from './user-service';
+import { CreateUserCommand } from './user-command';
+
 
 export class UserController {
   constructor(private userService: UserService) {}
@@ -17,12 +18,12 @@ export class UserController {
     next: express.NextFunction,
   ) => {
     try {
-      const dto = CreateUserDTO.fromRequest(req.body);
-      const data = await this.userService.createUser(dto);
+      const command = CreateUserCommand.fromRequest(req.body);
+      const user = await this.userService.createUser(command);
       const response: CreateUserResponse = {
         error: null,
         data: {
-          ...data,
+          user,
         },
         success: true,
       };

@@ -21,7 +21,7 @@ import type { AddEmailToListResponse } from '../../../../shared/src/api/marketin
 import { UserErrors, GenericErrors } from '../../../../shared/src/errors';
 
 const feature = loadFeature(
-  path.join(path.join(sharedTestRoot, 'features/registration.feature')),
+  path.join(sharedTestRoot, 'features/registration.feature'),
 );
 
 defineFeature(feature, (test) => {
@@ -142,8 +142,8 @@ defineFeature(feature, (test) => {
         existingUsers = table.map((user) => {
           return new CreateUserBuilder()
             .withEmail(user.email)
-            .withFirstname(user.firstName)
-            .withLastname(user.lastName)
+            .withFirstName(user.firstName)
+            .withLastName(user.lastName)
             .withUsername(user.username)
             .build();
         });
@@ -158,8 +158,8 @@ defineFeature(feature, (test) => {
         newUsers = table.map((input) => {
           return new CreateUserBuilder()
             .withEmail(input.email)
-            .withFirstname(input.firstName)
-            .withLastname(input.lastName)
+            .withFirstName(input.firstName)
+            .withLastName(input.lastName)
             .withUsername(input.username)
             .withPasswrod(input.password)
             .build();
@@ -202,8 +202,8 @@ defineFeature(feature, (test) => {
         existingUsers = table.map((user) => {
           return new CreateUserBuilder()
             .withEmail(user.email)
-            .withFirstname(user.firstName)
-            .withLastname(user.lastName)
+            .withFirstName(user.firstName)
+            .withLastName(user.lastName)
             .withUsername(user.username)
             .withPasswrod(user.password)
             .build();
@@ -219,8 +219,8 @@ defineFeature(feature, (test) => {
         newUsers = table.map((input) => {
           return new CreateUserBuilder()
             .withEmail(input.email)
-            .withFirstname(input.firstName)
-            .withLastname(input.lastName)
+            .withFirstName(input.firstName)
+            .withLastName(input.lastName)
             .withUsername(input.username)
             .withPasswrod(input.password)
             .build();

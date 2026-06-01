@@ -1,18 +1,13 @@
-import { PrismaClient, Member } from '../../generated/prisma/client';
-import { CreateUserDTO } from './user-dtos';
+import type { User } from '@dddforum/shared/api/user';
 
-import { User } from '@dddforum/shared/api/user';
+import type { IUserRepo } from '../ports/user-repo';
+import type { CreateUserCommand } from '../user-command';
+import type { PrismaClient } from '../../../shared/database/prisma/generated/client';
 
-export interface IUserRepo {
-  save(user: CreateUserDTO): Promise<{ user: User; member: Member }>;
-  getByEmail(email: string): Promise<User | null>;
-  getByUsername(username: string): Promise<User | null>;
-}
-
-export class UserRepo implements IUserRepo {
+export class PrismaUserRepo implements IUserRepo {
   constructor(private prisma: PrismaClient) {}
 
-  public async save(user: CreateUserDTO) {
+  public async save(user: CreateUserCommand): Promise<User> {
     const { email, firstName, lastName, username, password } = user;
 
     const result = await this.prisma.$transaction(async () => {
@@ -26,20 +21,16 @@ export class UserRepo implements IUserRepo {
         },
       });
 
-      const member = await this.prisma.member.create({
+      await this.prisma.member.create({
         data: { userId: user.id },
       });
 
-      return { user, member };
+      return user;
     });
 
-    const formattedUser = this.formatUser(result.user);
-    const data = {
-      user: formattedUser,
-      member: result.member,
-    };
+    const formattedUser = this.formatUser(result);
 
-    return data;
+    return formattedUser;
   }
 
   public async getByEmail(email: string): Promise<User | null> {

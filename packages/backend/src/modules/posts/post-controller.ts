@@ -1,9 +1,9 @@
 import express from 'express';
 
-import { PostService } from './post-service';
-import { getPostsDTO } from './post-dtos';
+import type { GetPostsResponse } from '@dddforum/shared/api/post';
 
-import { GetPostsResponse } from '@dddforum/shared/api/post';
+import type { PostService } from './post-service';
+import { getPostsQuery } from './post-query';
 
 export class PostController {
   constructor(private postService: PostService) {}
@@ -14,8 +14,8 @@ export class PostController {
     next: express.NextFunction,
   ) => {
     try {
-      const dto = getPostsDTO.fromRequest(req.query);
-      const posts = await this.postService.getPosts(dto);
+      const query = getPostsQuery.fromRequest(req.query);
+      const posts = await this.postService.getPosts(query);
       const response: GetPostsResponse = {
         error: null,
         data: { posts },

@@ -33,3 +33,12 @@ export class InvalidRequestQueryParamsException extends BadRequestError {
     );
   }
 }
+
+export class InvalidInputException extends BadRequestError {
+  constructor(fields: string[]) {
+    super(
+      'Invalid input: ' + fields.join(', '),
+      GenericErrors.VALIDATION_ERROR,
+    );
+  }
+}

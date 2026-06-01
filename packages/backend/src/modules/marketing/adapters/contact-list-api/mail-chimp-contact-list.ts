@@ -1,8 +1,8 @@
-import { EmailSubscription } from '@dddforum/shared/api/marketing';
+import type { EmailSubscription } from '@dddforum/shared/api/marketing';
+import type { IContactListAPI } from '../../ports/contact-list-api';
 
-export class ContactListAPI {
+export class MailchimpContactList implements IContactListAPI {
   async addEmailToList(email: string): Promise<EmailSubscription> {
-    // Do the actual work
     console.log(
       `MailchimpContactList: Adding ${email} list... for production usage.`,
     );

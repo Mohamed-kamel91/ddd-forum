@@ -1,7 +1,7 @@
 import express from 'express';
 
-import { MarketingService } from './marketing-service';
-import { AddEmailToListDTO } from './marketing-dtos';
+import type { MarketingService } from './marketing-service';
+import { AddEmailToListCommand } from './marketing-command';
 
 export class MarketingController {
   constructor(private marketingService: MarketingService) {}
@@ -12,8 +12,9 @@ export class MarketingController {
     next: express.NextFunction,
   ) => {
     try {
-      const dto = AddEmailToListDTO.fromRequest(req.body);
-      const data = await this.marketingService.addEmailToList(dto);
+      const command = AddEmailToListCommand.fromRequest(req.body);
+      const data =
+        await this.marketingService.addEmailToList(command);
 
       return res.json({
         error: null,

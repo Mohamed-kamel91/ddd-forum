@@ -1,5 +1,5 @@
-import { MarketingController } from './marketing-controller';
 import { BaseRouter } from '../../shared/http/base-router';
+import type { MarketingController } from './marketing-controller';
 
 export class MarketingRouter extends BaseRouter {
   public readonly basePath: string = '/marketing';
